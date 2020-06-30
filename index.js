@@ -19,6 +19,10 @@ io.on("connection", socket => {
   });
 });
 
+app.get('/',function(req,res){
+  res.send("HELLO WORLD")
+})
+
 app.put("/users/:name", function (req, res) {
   // (3)
   console.log("User joined: " + req.params.name);
