@@ -56,4 +56,4 @@ app.post("/users/:name/messages", function (req, res) {
 //   console.log("App listening on port 4000");
 // });
 
-server.listen(port, () => console.log("server running on port:" + port));
+server.listen(process.env.PORT || 5000, () => console.log("server running on port:" + port));
