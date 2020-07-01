@@ -1,59 +1,33 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const Pusher = require("pusher");
+const http = require("http");
+const socketIo = require("socket.io");
+
+const port = process.env.PORT || 4000;
+
 const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io").listen(server);
-const port = 4000;
 
-const pusherConfig = require("./pusher.json"); // (1)
-const pusherClient = new Pusher(pusherConfig);
+const server = http.createServer(app);
 
-app.use(bodyParser.json());
+const io = socketIo(server);
 
-io.on("connection", socket => {
-  console.log("a user connected :D");
-  socket.on("chat message", msg => {
+let interval;
+
+io.on("connection", (socket) => {
+  //Client Connected
+  console.log("New client connected");
+
+  //Client Disconnected
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+
+  //Recieved Message From Client
+  socket.on("chat_message", msg => {
     console.log(msg);
-    socket.emit("chat message", msg);
+
+    //Send Message To Cient
+    socket.emit("FromAPI", msg);
   });
 });
 
-app.get('/',function(req,res){
-  res.send("HELLO WORLD")
-})
-
-app.put("/users/:name", function (req, res) {
-  // (3)
-  console.log("User joined: " + req.params.name);
-  pusherClient.trigger("chat_channel", "join", {
-    name: req.params.name,
-  });
-  res.sendStatus(204);
-});
-
-app.delete("/users/:name", function (req, res) {
-  // (4)
-  console.log("User left: " + req.params.name);
-  pusherClient.trigger("chat_channel", "part", {
-    name: req.params.name,
-  });
-  res.sendStatus(204);
-});
-
-app.post("/users/:name/messages", function (req, res) {
-  // (5)
-  console.log("User " + req.params.name + " sent message: " + req.body.message);
-  pusherClient.trigger("chat_channel", "message", {
-    name: req.params.name,
-    message: req.body.message,
-  });
-  res.sendStatus(204);
-});
-
-// app.listen(4000, function () {
-//   // (6)
-//   console.log("App listening on port 4000");
-// });
-
-server.listen(process.env.PORT || 5000, () => console.log("server running on port:" + port));
+server.listen(port, () => console.log(`Listening on port ${port}`));
