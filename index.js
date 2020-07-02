@@ -16,7 +16,7 @@ app.get('/',function(req,res){
 })
 
 io.on("connection", (socket) => {
-  console.log(socket)
+  console.log(socket.conn,socket.conn.clients)
   //Client Connected
   console.log("New client connected");
 
