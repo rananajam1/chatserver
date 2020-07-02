@@ -22,11 +22,19 @@ io.on("connection", (socket) => {
   });
 
   //Recieved Message From Client
-  socket.on("chat_message", msg => {
-    console.log(msg);
-
+  socket.on("private-chat", data => {
+    console.log(data);
     //Send Message To Cient
-    socket.emit("FromAPI", msg);
+    socket.emit("FromAPI", "You have succesfully sent message to the API");
+  });
+  
+  //Recieved Message From Client
+  socket.on("typing", userName, IsTyping => {
+    console.log(msg);
+    //Send Message To Cient
+    if(IsTyping){
+      socket.emit("FromAPI", `${userName} is typing....`);
+    }
   });
 });
 
