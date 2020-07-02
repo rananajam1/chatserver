@@ -33,6 +33,7 @@ io.on("connection", (socket) => {
 
   //If user is typing
   socket.on('user-typing', data =>{
+    console.log("USER TYPING",data)
     if(data.isTyping){
       socket.emit("FromAPI", `${data.userName} is typing`)
     }
