@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
   //Recieved Message From Client
   socket.on("private-chat", data => {
     console.log(data);
-    let response = [{_id: Math.random(323), createdAt: data.createdAt, text: "Reply from Server", user: {_id: 200}}]
+    let response = [{_id: Math.random(323), createdAt: data.createdAt, text: `Reply from server ${data.message[0].text}`, user: {_id: 200}}]
     //Send Message To Cient
     socket.emit("FromAPI", {type:"Message", message:response});
   });
