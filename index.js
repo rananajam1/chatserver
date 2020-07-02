@@ -30,15 +30,6 @@ io.on("connection", (socket) => {
     //Send Message To Cient
     socket.emit("FromAPI", "You have succesfully sent message to the API");
   });
-  
-  //Recieved Message From Client
-  socket.on("typing", userName, IsTyping => {
-    console.log(msg);
-    //Send Message To Cient
-    if(IsTyping){
-      socket.emit("FromAPI", `${userName} is typing....`);
-    }
-  });
 });
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
