@@ -28,7 +28,7 @@ io.on("connection", (socket) => {
   socket.on("private-chat", data => {
     console.log(data);
     //Send Message To Cient
-    socket.emit("FromAPI", "You have succesfully sent message to the API");
+    socket.emit("FromAPI", [{_id: Math.random(323), createdAt: data.createdAt, text: "Reply from Server", user: {_id: 200}}]);
   });
 
   //If user is typing
