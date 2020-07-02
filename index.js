@@ -10,7 +10,10 @@ const server = http.createServer(app);
 
 const io = socketIo(server);
 
-let interval;
+
+app.get('/',function(req,res){
+  res.send("HELLO WORLD")
+})
 
 io.on("connection", (socket) => {
   //Client Connected
