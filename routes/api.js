@@ -44,7 +44,6 @@ api.post("/MakeConnection", (req, res) => {
 });
 
 api.post("/broadcast", function (req, res) {
-  console.log(req.body.UserObj);
   let buff = new Buffer.from(req.body.familyCode, "base64");
   let text = buff.toString("utf8");
   let splitColons = text.split(";");
