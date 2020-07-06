@@ -48,6 +48,12 @@ io.on("connection", (socket) => {
       BroadcastMessage(messageData.UserObj,messageData.familyCode)
   });
 
+  //Update Read Status
+  socket.on("update-messages", (data) => {
+    console.log(data)
+    UpdateMessages(data.From,data.To,data.familyCode)
+  });
+
   //If user is typing
   socket.on("user-typing", (data) => {
     console.log("USER TYPING", data);
@@ -93,6 +99,51 @@ function BroadcastMessage(UserObj,familyCode){
       if (err) console.error(err);
       else console.dir("SUCCESS", recordsets);
     });
+  });
+}
+
+function UpdateMessages(From,To,familyCode){
+  let buff = new Buffer.from(familyCode, "base64");
+  let text = buff.toString("utf8");
+  let splitColons = text.split(";");
+  let username = splitColons[1].split("=");
+  let password = splitColons[2].split("=");
+  let database = splitColons[3].split(" = ");
+  var dbConfig = {
+    user: username[1],
+    password: password[1],
+    server: "58.65.129.101",
+    database: database[1],
+  };
+  console.log(database[1])
+  var today = new Date();
+  today = today.toISOString().replace('T',' ').replace('Z','')
+    console.log(today)
+  var Query ="update cmatrix_received_sms set crsms_is_read = 1 where crsms_is_read = 0 and crsms_from_user_key = @FromUser and crsms_to_user_key = @ToUser";
+  var connection = new sql.ConnectionPool(dbConfig, function (err) {
+    var r = new sql.Request(connection);
+    r.input("ToUser", sql.VarChar, To),
+      r.input("FromUser", sql.VarChar, From),
+    r.multiple = true;
+    r.query(Query, function (err, recordsets) {
+      connection.close();
+      if (err) console.error(err);
+      else console.dir("SUCCESS", recordsets);
+    });
+  });
+}
+
+function CreateDbConnection(sqlConfig, callback) {
+  let connectionFunc = null;
+  if (sql.ConnectionPool) connectionFunc = sql.ConnectionPool;
+  else connectionFunc = sql.Connection;
+  let connection = new connectionFunc(sqlConfig, function (err) {
+    if (err) {
+      console.error("Error connecting to database: " + (err.message || err));
+    } else {
+      console.dir("Success", connection);
+      callback(null, connection);
+    }
   });
 }
 
