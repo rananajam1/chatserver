@@ -133,19 +133,4 @@ function UpdateMessages(From,To,familyCode){
   });
 }
 
-function CreateDbConnection(sqlConfig, callback) {
-  let connectionFunc = null;
-  if (sql.ConnectionPool) connectionFunc = sql.ConnectionPool;
-  else connectionFunc = sql.Connection;
-  let connection = new connectionFunc(sqlConfig, function (err) {
-    if (err) {
-      console.error("Error connecting to database: " + (err.message || err));
-    } else {
-      console.dir("Success", connection);
-      callback(null, connection);
-    }
-  });
-}
-
-
 server.listen(port, () => console.log(`Listening on port ${port}`));
