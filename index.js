@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
     console.log(messageData);
     io.sockets
       .in(messageData.reciever)
-      .emit("universal-message", messageData.message[0].text);
+      .emit("universal-message", messageData);
   });
 
   //If user is typing
