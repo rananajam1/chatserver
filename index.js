@@ -41,10 +41,13 @@ io.on("connection", (socket) => {
 
   //Send Message Listener
   socket.on("send-message", (messageData) => {
-    console.log(messageData);
+    console.log(messageData.message);
     io.sockets
       .in(messageData.reciever)
       .emit("universal-message", messageData);
+      io.sockets
+        .in(messageData.reciever)
+        .emit("new-message", messageData.message);
       BroadcastMessage(messageData.UserObj,messageData.familyCode)
   });
 
