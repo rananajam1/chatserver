@@ -117,9 +117,6 @@ function BroadcastMessage(UserObj, familyCode, messageData) {
     server: configObject["data source"],
     database: configObject["initial catalog"],
     port:parseInt(configObject['port']),
-    options: {
-      encrypt: true
-    }
   };
   console.log(dbConfig)
   var today = new Date();
