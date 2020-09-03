@@ -53,8 +53,7 @@ io.on("connection", (socket) => {
     io.sockets
       .in(messageData.reciever)
       .emit("new-message", messageData.message);
-    BroadcastMessage(messageData.UserObj, messageData.familyCode);
-    getUserGuID(messageData);
+    BroadcastMessage(messageData.UserObj, messageData.familyCode, messageData);
     // getFirebaseTokens(guid,messageData.licenseCode)
   });
 
@@ -110,7 +109,7 @@ function mapConnectionString(familyCode){
   });
 }
 
-function BroadcastMessage(UserObj, familyCode) {
+function BroadcastMessage(UserObj, familyCode, messageData) {
   mapConnectionString(familyCode)
   var dbConfig = {
     user: configObject["user id"],
@@ -140,7 +139,10 @@ function BroadcastMessage(UserObj, familyCode) {
     r.query(Query, function (err, recordsets) {
       connection.close();
       if (err) console.error(err);
-      else console.log("Message Sent", recordsets);
+      else{
+        console.log("Message Sent", recordsets);
+        getUserGuID(messageData);
+      }
     });
   });
 }
